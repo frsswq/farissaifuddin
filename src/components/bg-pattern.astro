@@ -1,0 +1,89 @@
+---
+
+---
+
+<div id="container"></div>
+<canvas id="backgroundCanvas"></canvas>
+
+<style>
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  const container: HTMLElement | null = document.getElementById("container");
+  const backgroundCanvas: HTMLCanvasElement | null = document.getElementById(
+    "backgroundCanvas"
+  ) as HTMLCanvasElement;
+
+  function drawOval(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ): void {
+    ctx.beginPath();
+    ctx.ellipse(x, y, width / 2, height / 2, 0, 0, 2 * Math.PI);
+    ctx.fill();
+  }
+
+  function drawCanvasPattern(): void {
+    if (!backgroundCanvas) return;
+
+    const ctx: CanvasRenderingContext2D | null =
+      backgroundCanvas.getContext("2d");
+
+    if (!ctx) return;
+
+    const dpr: number = window.devicePixelRatio || 1;
+
+    const width: number = window.innerWidth;
+    const height: number = window.innerHeight;
+
+    backgroundCanvas.width = width * dpr;
+    backgroundCanvas.height = height * dpr;
+
+    backgroundCanvas.style.width = width + "px";
+    backgroundCanvas.style.height = height + "px";
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, width, height);
+
+    const ovalWidth: number = 1.6;
+    const ovalHeight: number = 3;
+    const columnSpacing: number = 4;
+    const rowSpacing: number = 5;
+    const offsetY: number = 2.5;
+
+    ctx.fillStyle = "#000000";
+
+    for (let x = 0; x < width + columnSpacing; x += columnSpacing) {
+      for (let y = 0; y < height + rowSpacing; y += rowSpacing) {
+        drawOval(ctx, x, y, ovalWidth, ovalHeight);
+        drawOval(
+          ctx,
+          x + columnSpacing / 2,
+          y + offsetY,
+          ovalWidth,
+          ovalHeight
+        );
+      }
+    }
+  }
+
+  drawCanvasPattern();
+
+  window.addEventListener("resize", (): void => {
+    if (backgroundCanvas.style.display !== "none") {
+      drawCanvasPattern();
+    }
+  });
+</script>
