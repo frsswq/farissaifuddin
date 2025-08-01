@@ -1,5 +1,12 @@
 ---
+import Folder from "../components/folder.svelte";
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout />
+<Layout>
+	<div class="flex min-h-full items-center justify-center">
+		<Folder client:load />
+		<Folder client:load />
+		<Folder client:load />
+	</div>
+</Layout>
