@@ -12,6 +12,7 @@
     left: 0;
     z-index: -1;
     pointer-events: none;
+    image-rendering: optimizeSpeed;
   }
 </style>
 
@@ -81,9 +82,14 @@
 
   drawCanvasPattern();
 
+  let resizeTimeout: number;
+
   window.addEventListener("resize", (): void => {
-    if (backgroundCanvas.style.display !== "none") {
-      drawCanvasPattern();
-    }
+    clearTimeout(resizeTimeout);
+    resizeTimeout = window.setTimeout(() => {
+      if (backgroundCanvas.style.display !== "none") {
+        drawCanvasPattern();
+      }
+    }, 100);
   });
 </script>
