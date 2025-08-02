@@ -32,10 +32,7 @@
 			id="window-header"
 			class="	sticky top-0 z-1 h-4 w-full bg-black text-white hover:cursor-grab md:h-[18px]"
 		>
-			<p
-				class="w-fit overflow-hidden whitespace-nowrap hover:cursor-text"
-				contenteditable="plaintext-only"
-			>
+			<p class="w-fit whitespace-nowrap hover:cursor-text">
 				{headerText ?? "Untitled 1.0"}
 			</p>
 		</div>
