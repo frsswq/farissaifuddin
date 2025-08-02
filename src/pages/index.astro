@@ -10,3 +10,25 @@ import Layout from "../layouts/Layout.astro";
 		<Window client:load />
 	</main>
 </Layout>
+
+<style>
+	main {
+		contain: layout style paint;
+		transform: translateZ(0);
+		-webkit-transform: translateZ(0);
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+		overflow: hidden;
+	}
+
+	main > * {
+		transform: translate3d(0, 0, 0);
+		will-change: transform;
+	}
+
+	body {
+		overflow: hidden;
+		position: fixed;
+		touch-action: manipulation;
+	}
+</style>

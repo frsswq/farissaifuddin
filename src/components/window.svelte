@@ -11,7 +11,7 @@
 
 <div
 	{@attach draggable([
-		controls({ allow: ControlFrom.selector("#window-header") }),
+		controls({ allow: ControlFrom.selector(mobile.current ? "#window" : "#window-header") }),
 		events({
 			onDragStart: () => {
 				if (currentZIndex <= highestZIndex.index) {
@@ -25,7 +25,7 @@
 	style={`z-index: ${currentZIndex}`}
 	class={`absolute aspect-4/3 h-[200px] border-2 border-black bg-white text-xs leading-none md:text-sm`}
 >
-	<div class="relative flex h-full flex-col">
+	<div class="relative flex h-full flex-col hover:cursor-grab md:hover:cursor-default">
 		<span
 			id="inset-border"
 			class="pointer-events-none absolute top-[0.5px] right-[0.5px] bottom-[0.5px] left-[0.5px] border-2 border-black"
@@ -33,14 +33,14 @@
 
 		<div
 			id="window-header"
-			class="	sticky top-0 z-1 h-4 w-full bg-black text-white hover:cursor-grab md:h-[18px]"
+			class="	sticky top-0 z-1 h-4 w-full bg-black text-white md:h-[18px] md:hover:cursor-grab"
 		>
 			<p class="w-fit whitespace-nowrap hover:cursor-text">
 				{headerText ?? "Untitled 1.0"}
 			</p>
 		</div>
 		<div
-			class="mx-[3px] flex-1 overflow-auto focus:outline-none"
+			class="mx-[3px] flex-1 overflow-auto focus:outline-none md:hover:cursor-text"
 			contenteditable={mobile.current ? "false" : "plaintext-only"}
 		>
 			<p>{contentText ?? "NO TEXT"}</p>
