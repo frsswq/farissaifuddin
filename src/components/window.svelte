@@ -1,6 +1,9 @@
 <script lang="ts">
-	import { bounds, BoundsFrom, ControlFrom, controls, draggable, events } from "@neodrag/svelte";
+	import { ControlFrom, controls, draggable, events } from "@neodrag/svelte";
+	import { MediaQuery } from "svelte/reactivity";
 	import { highestZIndex } from "../lib/shared-state.svelte";
+
+	const mobile = new MediaQuery("max-width: 768px");
 
 	let { headerText, contentText } = $props();
 	let currentZIndex = $state(10);
@@ -9,7 +12,6 @@
 <div
 	{@attach draggable([
 		controls({ allow: ControlFrom.selector("#window-header") }),
-		bounds(BoundsFrom.viewport()),
 		events({
 			onDragStart: () => {
 				if (currentZIndex <= highestZIndex.index) {
@@ -19,6 +21,7 @@
 			}
 		})
 	])}
+	id="window"
 	style={`z-index: ${currentZIndex}`}
 	class={`absolute aspect-4/3 h-[200px] border-2 border-black bg-white text-xs leading-none md:text-sm`}
 >
@@ -36,7 +39,10 @@
 				{headerText ?? "Untitled 1.0"}
 			</p>
 		</div>
-		<div class="mx-[3px] flex-1 overflow-auto focus:outline-none" contenteditable="plaintext-only">
+		<div
+			class="mx-[3px] flex-1 overflow-auto focus:outline-none"
+			contenteditable={mobile.current ? "false" : "plaintext-only"}
+		>
 			<p>{contentText ?? "NO TEXT"}</p>
 		</div>
 	</div>
