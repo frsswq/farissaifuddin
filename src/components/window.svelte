@@ -48,7 +48,7 @@
 			mobile.current ? "select-none" : ""
 		)}
 	>
-		<div class="relative flex h-full flex-col hover:cursor-grab md:hover:cursor-default">
+		<div class="relative flex h-full flex-col hover:cursor-grab sm:hover:cursor-default">
 			<span
 				id="inset-border"
 				class="pointer-events-none absolute top-[0.5px] right-[0.5px] bottom-[0.5px] left-[0.5px] border-2 border-black"
@@ -56,20 +56,20 @@
 
 			<div
 				id="window-header"
-				class="	sticky top-0 z-1 flex h-[18px] w-full justify-between bg-black text-white select-none md:hover:cursor-grab"
+				class="	sticky top-0 z-1 flex h-[18px] w-full justify-between bg-black text-white select-none sm:hover:cursor-grab"
 			>
 				<p class="absolute -top-0.5 w-fit whitespace-nowrap">
 					{headerText !== "" ? headerText : "Untitled 1.0"}
 				</p>
 				<button
-					class="absolute -top-1 -right-1 inline-flex hover:cursor-pointer"
+					class="absolute -top-0.5 -right-0.5 inline-flex size-4.5 hover:cursor-pointer"
 					onclick={() => (showWindow = false)}
 				>
-					<CloseIcon className="size-4.75 block" />
+					<CloseIcon className="size-5.25 shrink absolute -top-0.75 -right-0.5" />
 				</button>
 			</div>
 			<div
-				class="mx-[3px] flex-1 overflow-auto focus:outline-none md:hover:cursor-text"
+				class="mx-[3px] flex-1 overflow-auto focus:outline-none sm:hover:cursor-text"
 				contenteditable={mobile.current ? "false" : "plaintext-only"}
 			>
 				<p>{contentText !== "" ? contentText : "NO TEXT"}</p>
