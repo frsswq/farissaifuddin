@@ -54,7 +54,7 @@
 	function drawCanvasPattern(): void {
 		if (!backgroundCanvas) return;
 
-		const cacheKey = `canvas-pattern-${window.innerWidth}x${window.innerHeight}`;
+		const cacheKey = `canvas-pattern-${window.innerWidth}x${window.innerHeight}-${window.devicePixelRatio || 1}`;
 		const cached = sessionStorage.getItem(cacheKey);
 
 		if (cached) {
@@ -62,7 +62,7 @@
 			img.onload = () => {
 				const setup = setupCanvas();
 				if (setup) {
-					setup.ctx.drawImage(img, 0, 0);
+					setup.ctx.drawImage(img, 0, 0, setup.width, setup.height);
 				}
 			};
 			img.src = cached;
@@ -85,8 +85,8 @@
 
 		ctx.fillStyle = "#000000";
 
-		for (let x = 0; x < width + columnSpacing; x += columnSpacing) {
-			for (let y = 0; y < height + rowSpacing; y += rowSpacing) {
+		for (let x = -columnSpacing; x <= width + columnSpacing; x += columnSpacing) {
+			for (let y = -rowSpacing; y <= height + rowSpacing; y += rowSpacing) {
 				drawOval(ctx, x, y, ovalWidth, ovalHeight);
 				drawOval(ctx, x + columnSpacing / 2, y + offsetY, ovalWidth, ovalHeight);
 			}
