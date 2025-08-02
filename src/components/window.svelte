@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { ControlFrom, controls, draggable, events } from "@neodrag/svelte";
 	import { MediaQuery } from "svelte/reactivity";
+
 	import { highestZIndex } from "../lib/shared-state.svelte";
+	import { cn } from "../lib/utils";
 
 	const mobile = new MediaQuery("max-width: 768px");
 
@@ -23,7 +25,10 @@
 	])}
 	id="window"
 	style={`z-index: ${currentZIndex}`}
-	class={`absolute aspect-4/3 h-[200px] border-2 border-black bg-white text-xs leading-none md:text-sm`}
+	class={cn(
+		`absolute aspect-4/3 h-[200px] border-2 border-black bg-white text-sm leading-none`,
+		mobile.current ? "select-none" : ""
+	)}
 >
 	<div class="relative flex h-full flex-col hover:cursor-grab md:hover:cursor-default">
 		<span
@@ -33,9 +38,9 @@
 
 		<div
 			id="window-header"
-			class="	sticky top-0 z-1 h-4 w-full bg-black text-white md:h-[18px] md:hover:cursor-grab"
+			class="	sticky top-0 z-1 h-[18px] w-full bg-black text-white select-none md:hover:cursor-grab"
 		>
-			<p class="w-fit whitespace-nowrap hover:cursor-text">
+			<p class="w-fit whitespace-nowrap">
 				{headerText ?? "Untitled 1.0"}
 			</p>
 		</div>
