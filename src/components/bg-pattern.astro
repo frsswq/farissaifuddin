@@ -2,94 +2,114 @@
 
 ---
 
-<div id="container"></div>
 <canvas id="backgroundCanvas"></canvas>
 
 <style>
-  canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    pointer-events: none;
-    image-rendering: optimizeSpeed;
-  }
+	canvas {
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: -1;
+		pointer-events: none;
+		image-rendering: optimizeSpeed;
+	}
 </style>
 
 <script>
-  const container: HTMLElement | null = document.getElementById("container");
-  const backgroundCanvas: HTMLCanvasElement | null = document.getElementById(
-    "backgroundCanvas"
-  ) as HTMLCanvasElement;
+	const backgroundCanvas: HTMLCanvasElement | null = document.getElementById(
+		"backgroundCanvas"
+	) as HTMLCanvasElement;
 
-  function drawOval(
-    ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
-    width: number,
-    height: number
-  ): void {
-    ctx.beginPath();
-    ctx.ellipse(x, y, width / 2, height / 2, 0, 0, 2 * Math.PI);
-    ctx.fill();
-  }
+	function drawOval(
+		ctx: CanvasRenderingContext2D,
+		x: number,
+		y: number,
+		width: number,
+		height: number
+	): void {
+		ctx.beginPath();
+		ctx.ellipse(x, y, width / 2, height / 2, 0, 0, 2 * Math.PI);
+		ctx.fill();
+	}
 
-  function drawCanvasPattern(): void {
-    if (!backgroundCanvas) return;
+	function setupCanvas() {
+		if (!backgroundCanvas) return null;
 
-    const ctx: CanvasRenderingContext2D | null =
-      backgroundCanvas.getContext("2d");
+		const ctx: CanvasRenderingContext2D | null = backgroundCanvas.getContext("2d");
+		if (!ctx) return null;
 
-    if (!ctx) return;
+		const dpr = window.devicePixelRatio || 1;
+		const width = window.innerWidth;
+		const height = window.innerHeight;
 
-    const dpr: number = window.devicePixelRatio || 1;
+		backgroundCanvas.width = width * dpr;
+		backgroundCanvas.height = height * dpr;
+		backgroundCanvas.style.width = width + "px";
+		backgroundCanvas.style.height = height + "px";
 
-    const width: number = window.innerWidth;
-    const height: number = window.innerHeight;
+		ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+		return { ctx, width, height };
+	}
 
-    backgroundCanvas.width = width * dpr;
-    backgroundCanvas.height = height * dpr;
+	function drawCanvasPattern(): void {
+		if (!backgroundCanvas) return;
 
-    backgroundCanvas.style.width = width + "px";
-    backgroundCanvas.style.height = height + "px";
+		const cacheKey = `canvas-pattern-${window.innerWidth}x${window.innerHeight}`;
+		const cached = sessionStorage.getItem(cacheKey);
 
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+		if (cached) {
+			const img = document.createElement("img") as HTMLImageElement;
+			img.onload = () => {
+				const setup = setupCanvas();
+				if (setup) {
+					setup.ctx.drawImage(img, 0, 0);
+				}
+			};
+			img.src = cached;
+			return;
+		}
 
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, width, height);
+		const setup = setupCanvas();
+		if (!setup) return;
 
-    const ovalWidth: number = 1.6;
-    const ovalHeight: number = 3;
-    const columnSpacing: number = 4;
-    const rowSpacing: number = 5;
-    const offsetY: number = 2.5;
+		const { ctx, width, height } = setup;
 
-    ctx.fillStyle = "#000000";
+		ctx.fillStyle = "#ffffff";
+		ctx.fillRect(0, 0, width, height);
 
-    for (let x = 0; x < width + columnSpacing; x += columnSpacing) {
-      for (let y = 0; y < height + rowSpacing; y += rowSpacing) {
-        drawOval(ctx, x, y, ovalWidth, ovalHeight);
-        drawOval(
-          ctx,
-          x + columnSpacing / 2,
-          y + offsetY,
-          ovalWidth,
-          ovalHeight
-        );
-      }
-    }
-  }
+		const ovalWidth = 1.6;
+		const ovalHeight = 3;
+		const columnSpacing = 4;
+		const rowSpacing = 5;
+		const offsetY = 2.5;
 
-  drawCanvasPattern();
+		ctx.fillStyle = "#000000";
 
-  let resizeTimeout: number;
+		for (let x = -columnSpacing; x <= width + columnSpacing; x += columnSpacing) {
+			for (let y = -rowSpacing; y <= height + rowSpacing; y += rowSpacing) {
+				drawOval(ctx, x, y, ovalWidth, ovalHeight);
+				drawOval(ctx, x + columnSpacing / 2, y + offsetY, ovalWidth, ovalHeight);
+			}
+		}
 
-  window.addEventListener("resize", (): void => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = window.setTimeout(() => {
-      if (backgroundCanvas.style.display !== "none") {
-        drawCanvasPattern();
-      }
-    }, 100);
-  });
+		try {
+			const dataURL = backgroundCanvas.toDataURL();
+			sessionStorage.setItem(cacheKey, dataURL);
+		} catch (e) {
+			console.warn("Failed to cache canvas pattern");
+		}
+	}
+
+	drawCanvasPattern();
+
+	let resizeTimeout: number;
+
+	window.addEventListener("resize", (): void => {
+		clearTimeout(resizeTimeout);
+		resizeTimeout = window.setTimeout(() => {
+			if (backgroundCanvas.style.display !== "none") {
+				drawCanvasPattern();
+			}
+		}, 300);
+	});
 </script>

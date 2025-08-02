@@ -33,7 +33,7 @@
 			class="	sticky top-0 z-1 h-4 w-full bg-black text-white hover:cursor-grab md:h-[18px]"
 		>
 			<p
-				class="w-fit overflow-x-scroll whitespace-nowrap hover:cursor-text"
+				class="w-fit overflow-hidden whitespace-nowrap hover:cursor-text"
 				contenteditable="plaintext-only"
 			>
 				{headerText ?? "Untitled 1.0"}
