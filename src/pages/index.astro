@@ -1,13 +1,11 @@
 ---
-import Window from "../components/window.svelte";
+import WindowContainer from "../components/window-container.svelte";
 import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
 	<main id="window-containers" class="fixed inset-0 h-screen w-screen">
-		<Window client:load />
-		<Window client:load />
-		<Window client:load />
+		<WindowContainer client:load />
 	</main>
 </Layout>
 
