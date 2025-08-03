@@ -10,16 +10,24 @@
 
 	const mobile = new MediaQuery("max-width: 768px");
 
-	let { headerText = "", contentText = "" } = $props();
+	let {
+		headerText = "",
+		contentText = "",
+		children = undefined,
+		posX = 0,
+		posY = 0,
+		sizeX = 0,
+		sizeY = 0
+	} = $props();
 	let currentZIndex = $state(10);
 
 	let showWindow: boolean = $state(true);
 
 	let windowElement = $state<HTMLDivElement | null>(null);
-	let windowPosition = $state({ x: 0, y: 0 });
+	let windowPosition = $state({ x: posX, y: posY });
 
 	onMount(() => {
-		if (windowElement && innerWidth.current && innerHeight.current) {
+		if (windowElement && innerWidth.current && innerHeight.current && (posX === 0 || posY === 0)) {
 			const rect = windowElement.getBoundingClientRect();
 			windowPosition = {
 				x: Math.max(0, (innerWidth.current - rect.width) / 2),
@@ -42,9 +50,9 @@
 			position({ default: windowPosition })
 		])}
 		id="window"
-		style={`z-index: ${currentZIndex}`}
+		style={`z-index: ${currentZIndex}; width: ${sizeX !== 0 ? sizeX : 200}px; height: ${sizeY !== 0 ? sizeY : 150}px`}
 		class={cn(
-			`absolute aspect-4/3 h-[200px] border-2 border-black bg-white text-[15px] leading-none`,
+			`absolute  border-2 border-black bg-white text-[15px] leading-none`,
 			mobile.current ? "select-none" : ""
 		)}
 	>
@@ -72,7 +80,11 @@
 				class="mx-[3px] flex-1 overflow-auto focus:outline-none sm:hover:cursor-text"
 				contenteditable={mobile.current ? "false" : "plaintext-only"}
 			>
-				<p>{contentText !== "" ? contentText : "NO TEXT"}</p>
+				{#if children}
+					{@render children()}
+				{:else}
+					<p>{contentText !== "" ? contentText : "NO TEXT"}</p>
+				{/if}
 			</div>
 		</div>
 	</div>
