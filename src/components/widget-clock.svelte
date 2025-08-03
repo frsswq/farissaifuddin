@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { draggable, position } from "@neodrag/svelte";
+	import { draggable, events, position } from "@neodrag/svelte";
 	import { onMount } from "svelte";
+	import { highestZIndex } from "../lib/shared-state.svelte";
 
 	let time = $state(new Date());
+	let currentZIndex = $state(10);
 
 	let hours = $derived(time.getHours());
 	let minutes = $derived(time.getMinutes());
@@ -20,7 +22,14 @@
 </script>
 
 <div
-	{@attach draggable([position({ default: { x: 15, y: 15 } })])}
+	{@attach draggable([
+		events({
+			onDragStart: () => {
+				currentZIndex = ++highestZIndex.index;
+			}
+		}),
+		position({ default: { x: 15, y: 15 } })
+	])}
 	class="absolute size-20 items-center justify-center bg-black hover:cursor-grab md:size-25"
 >
 	<svg class="h-full w-full" viewBox="-50 -50 100 100">

@@ -78,21 +78,16 @@
 					<CloseIcon className="size-4.5 shrink absolute -top-0.5 -right-0.5" />
 				</button>
 			</div>
-			<div
-				class={cn(
-					"mx-[3px] flex-1 overflow-auto focus:outline-none",
-					children ? "sm:hover:cursor-grab" : "sm:hover:cursor-text"
-				)}
-				contenteditable={mobile.current || children ? "false" : "plaintext-only"}
-			>
-				{#if children}
-					{@render children()}
-				{:else}
-					<textarea class="h-full w-full resize-none"
-						>{contentText !== "" ? contentText : "frsswq%"}</textarea
-					>
-				{/if}
-			</div>
+			{#if children}
+				{@render children()}
+			{:else}
+				<div
+					class={"mx-[3px] flex-1 overflow-auto focus:outline-none sm:hover:cursor-text"}
+					contenteditable={mobile.current ? "false" : "plaintext-only"}
+				>
+					<textarea class="h-full w-full resize-none">{contentText}</textarea>
+				</div>
+			{/if}
 		</div>
 	</div>
 {/if}
