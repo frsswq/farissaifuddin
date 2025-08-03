@@ -60,12 +60,16 @@
 				transform="rotate({30 * hours + minutes / 2})"
 			/>
 			<line
-				class="stroke-black stroke-[1px]"
+				class="stroke-slate-700 stroke-[1px]"
 				y1="8"
-				y2="-35"
+				y2="-30"
 				transform="rotate({6 * minutes + seconds / 10})"
 			/>
-			<circle class="fill-none stroke-black stroke-1" r="2" />
+			<g transform="rotate({6 * seconds})">
+				<line class="stroke-slate-500 stroke-[0.75px]" y1="10" y2="-35" />
+				<!-- <line class="stroke-red-800 stroke-[2.5px]" y1="15" y2="6" /> -->
+			</g>
+			<circle class="fill-none stroke-slate-500 stroke-1" r="2" />
 		</svg>
 	</div>
 </Window>
