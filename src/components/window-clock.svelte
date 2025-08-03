@@ -31,18 +31,6 @@
 					transform="rotate({30 * minute})"
 				/>
 
-				<!-- {#if minute % 15 === 0}
-					<text
-						x="0"
-						y="0"
-						text-anchor="middle"
-						dominant-baseline="middle"
-						transform="rotate({30 * minute}) translate(0, -36) rotate({-30 * minute})"
-						class="text-[8px] leading-none font-bold">{minute === 0 ? 12 : minute / 5}</text
-					>
-				{:else}
-					<circle class="fill-slate-700" transform="rotate({30 * minute}) translate(0, 35)" r="1" />
-				{/if} -->
 				{#each [1, 2, 3, 4] as offset}
 					<line
 						class="stroke-slate-700 stroke-[0.5px]"
