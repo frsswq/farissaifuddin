@@ -41,7 +41,9 @@
 	<div
 		bind:this={windowElement}
 		{@attach draggable([
-			controls({ allow: ControlFrom.selector(mobile.current ? "#window" : "#window-header") }),
+			controls({
+				allow: ControlFrom.selector(mobile.current || children ? "#window" : "#window-header")
+			}),
 			events({
 				onDragStart: () => {
 					currentZIndex = ++highestZIndex.index;
@@ -52,7 +54,7 @@
 		id="window"
 		style={`z-index: ${currentZIndex}; width: ${sizeX !== 0 ? sizeX : 200}px; height: ${sizeY !== 0 ? sizeY : 150}px`}
 		class={cn(
-			`absolute  border-2 border-black bg-white text-[15px] leading-none`,
+			`absolute  border-2 border-black bg-white text-sm leading-none`,
 			mobile.current ? "select-none" : ""
 		)}
 	>
@@ -64,7 +66,7 @@
 
 			<div
 				id="window-header"
-				class="	sticky top-0 z-1 flex h-[18px] w-full justify-between bg-black text-white select-none sm:hover:cursor-grab"
+				class="	sticky top-0 z-1 flex h-4 w-full justify-between bg-black text-white select-none sm:hover:cursor-grab"
 			>
 				<p class="absolute -top-0.5 w-fit whitespace-nowrap">
 					{headerText !== "" ? headerText : "Untitled 1.0"}
@@ -73,12 +75,15 @@
 					class="absolute -top-0.5 -right-0.5 inline-flex size-4.5 hover:cursor-pointer"
 					onclick={() => (showWindow = false)}
 				>
-					<CloseIcon className="size-5.25 shrink absolute -top-0.75 -right-0.5" />
+					<CloseIcon className="size-4.5 shrink absolute -top-0.75 -right-0.5" />
 				</button>
 			</div>
 			<div
-				class="mx-[3px] flex-1 overflow-auto focus:outline-none sm:hover:cursor-text"
-				contenteditable={mobile.current ? "false" : "plaintext-only"}
+				class={cn(
+					"mx-[3px] flex-1 overflow-auto focus:outline-none",
+					children ? "sm:hover:cursor-grab" : "sm:hover:cursor-text"
+				)}
+				contenteditable={mobile.current || children ? "false" : "plaintext-only"}
 			>
 				{#if children}
 					{@render children()}

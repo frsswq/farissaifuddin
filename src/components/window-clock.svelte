@@ -19,7 +19,7 @@
 	});
 </script>
 
-<Window headerText="Clock" posX={20} posY={20} sizeX={150} sizeY={165}>
+<Window headerText="Clock" posX={20} posY={20} sizeX={125} sizeY={140}>
 	<div class="flex items-center justify-center">
 		<svg class="h-full w-full" viewBox="-50 -50 100 100">
 			<circle class="fill-white stroke-black stroke-[0.75px]" r="45" />
@@ -65,10 +65,12 @@
 				y2="-30"
 				transform="rotate({6 * minutes + seconds / 10})"
 			/>
-			<g transform="rotate({6 * seconds})">
-				<line class="stroke-slate-500 stroke-[0.75px]" y1="10" y2="-35" />
-				<!-- <line class="stroke-red-800 stroke-[2.5px]" y1="15" y2="6" /> -->
-			</g>
+			<line
+				class="stroke-slate-500 stroke-[0.75px]"
+				y1="10"
+				y2="-35"
+				transform="rotate({6 * seconds})"
+			/>
 			<circle class="fill-none stroke-slate-500 stroke-1" r="2" />
 		</svg>
 	</div>
