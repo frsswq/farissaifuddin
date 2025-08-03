@@ -1,11 +1,11 @@
 <script lang="ts">
-	import WindowClock from "./window-clock.svelte";
+	import WidgetClock from "./widget-clock.svelte";
+	import WindowAbout from "./window-about.svelte";
 	import Window from "./window.svelte";
 </script>
 
 <section>
-	<WindowClock />
-	<Window />
-	<Window />
+	<WidgetClock />
+	<WindowAbout />
 	<Window />
 </section>

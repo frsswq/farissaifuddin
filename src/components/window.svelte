@@ -88,7 +88,9 @@
 				{#if children}
 					{@render children()}
 				{:else}
-					<p>{contentText !== "" ? contentText : "NO TEXT"}</p>
+					<textarea class="h-full w-full resize-none"
+						>{contentText !== "" ? contentText : "frsswq%"}</textarea
+					>
 				{/if}
 			</div>
 		</div>
