@@ -57,7 +57,7 @@
 		id="window"
 		style={`z-index: ${currentZIndex}; width: ${sizeX !== 0 ? sizeX : 200}px; height: ${sizeY !== 0 ? sizeY : 150}px`}
 		class={cn(
-			`absolute  border-2 border-black bg-white text-sm leading-none`,
+			`absolute border-2 border-black bg-white text-sm leading-none`,
 			isMobile.current ? "select-none" : ""
 		)}
 	>

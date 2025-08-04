@@ -8,7 +8,7 @@
 	let isProcessing = $state(false);
 	const isMobile = new MediaQuery("max-width: 640px");
 
-	let terminalEl = $state<HTMLButtonElement | null>();
+	let terminalEl = $state<HTMLDivElement | null>();
 	let inputEl = $state<HTMLTextAreaElement | null>();
 	let inputVal = $state("");
 	let terminalLines = $state<string[]>([]);
@@ -72,11 +72,12 @@
 </script>
 
 <Window headerText="cmdtool 1.0" posX={15} {posY} {sizeX} {sizeY}>
-	<button
+	<div
 		bind:this={terminalEl}
-		type="button"
-		class="mx-[3px] mt-0.75 flex h-full w-full flex-col select-text hover:cursor-text"
+		class="mt-0.75 flex h-full w-full flex-col overflow-scroll px-[3px] select-text hover:cursor-text"
 		onclick={() => inputEl?.focus()}
+		tabindex="-1"
+		aria-hidden="true"
 	>
 		{#each terminalLines as line}
 			<div class="text-left wrap-anywhere whitespace-pre-wrap">{line}<br /></div>
@@ -103,7 +104,7 @@
 				</div>
 			</div>
 		</div>
-	</button>
+	</div>
 </Window>
 
 <style>
