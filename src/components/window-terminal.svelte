@@ -49,6 +49,8 @@
 			e.preventDefault();
 			runCommand();
 		}
+
+		// @TODO: Add up and down key for accessing commands
 	};
 
 	onMount(() => {
