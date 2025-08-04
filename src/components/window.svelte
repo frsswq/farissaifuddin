@@ -45,7 +45,7 @@
 		bind:this={windowElement}
 		{@attach draggable([
 			controls({
-				allow: ControlFrom.selector(isMobile.current || children ? "#window" : "#window-header")
+				allow: ControlFrom.selector(isMobile.current && children ? "#window" : "#window-header")
 			}),
 			events({
 				onDragStart: () => {
