@@ -2,6 +2,7 @@
 	import { onMount } from "svelte";
 	import { MediaQuery } from "svelte/reactivity";
 	import { innerHeight, innerWidth } from "svelte/reactivity/window";
+	import { executeCommands } from "../lib/terminal-commands";
 	import Window from "./window.svelte";
 
 	let isProcessing = $state(false);
@@ -10,7 +11,7 @@
 	let terminalEl = $state<HTMLButtonElement | null>();
 	let inputEl = $state<HTMLTextAreaElement | null>();
 	let inputVal = $state("");
-	let terminalLines = $state(["frsswq% cat ~/about/*", ""]);
+	let terminalLines = $state<string[]>([]);
 	let sizeX = $state(0);
 	let sizeY = $state(0);
 	let posY = $state(105);
@@ -18,30 +19,22 @@
 	const DESKTOP_WIDTH = 400;
 	const DESKTOP_HEIGHT = (DESKTOP_WIDTH * 3) / 4;
 
-	const runCommand = () => {
+	function runCommand() {
 		if (!inputVal.trim()) return;
+
+		const command = inputVal.trim();
 		isProcessing = true;
 
-		const [cmd, ...args] = inputVal.trim().split(" ");
-
-		if (cmd !== "clear") {
-			terminalLines.push(`frsswq% ${inputVal}`);
+		if (command !== "clear") {
+			terminalLines.push(`frsswq% ${command}`);
 		}
 
-		if (cmd === "clear") {
+		const result = executeCommands(command);
+
+		if (command !== "clear") {
+			terminalLines.push(...result, "");
+		} else {
 			terminalLines = [];
-		}
-
-		if (cmd === "date") {
-			terminalLines.push(`${new Date().toString()}`);
-		}
-
-		if (cmd === "whoami") {
-			terminalLines.push(`frsswq (Faris Saifuddin)`);
-		}
-
-		if (cmd !== "clear") {
-			terminalLines.push("");
 		}
 
 		inputVal = "";
@@ -51,7 +44,7 @@
 		}, 0);
 
 		isProcessing = false;
-	};
+	}
 
 	const handleKeyDown = (e: KeyboardEvent) => {
 		if (e.key === "Enter") {
@@ -68,6 +61,9 @@
 
 		sizeX = isMobile.current ? MOBILE_WIDTH : DESKTOP_WIDTH;
 		sizeY = isMobile.current ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
+
+		terminalLines.push("frsswq% help", ...executeCommands("help"), "");
+		terminalLines.push("frsswq% about", ...executeCommands("about"), "");
 
 		setTimeout(() => {
 			if (terminalEl) terminalEl.scrollTop = terminalEl.scrollHeight;
