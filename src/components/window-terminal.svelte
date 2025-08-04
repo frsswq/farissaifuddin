@@ -1,28 +1,22 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { MediaQuery } from "svelte/reactivity";
+	import { innerHeight, innerWidth } from "svelte/reactivity/window";
 	import Window from "./window.svelte";
 
 	let isProcessing = $state(false);
-	const isMobile = new MediaQuery("max-width: 768px");
+	const isMobile = new MediaQuery("max-width: 640px");
 
 	let terminalEl = $state<HTMLButtonElement | null>();
 	let inputEl = $state<HTMLTextAreaElement | null>();
 	let inputVal = $state("");
 	let terminalLines = $state(["frsswq% cat ~/about/*", ""]);
-	let posX, posY;
 	let sizeX = $state(0);
 	let sizeY = $state(0);
+	let posY = $state(105);
 
 	const DESKTOP_WIDTH = 400;
 	const DESKTOP_HEIGHT = (DESKTOP_WIDTH * 3) / 4;
-	const MOBILE_WIDTH = 300;
-	const MOBILE_HEIGHT = (MOBILE_WIDTH * 3) / 4;
-
-	$effect(() => {
-		sizeX = isMobile.current ? MOBILE_WIDTH : DESKTOP_WIDTH;
-		sizeY = isMobile.current ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
-	});
 
 	const runCommand = () => {
 		if (!inputVal.trim()) return;
@@ -67,13 +61,21 @@
 	};
 
 	onMount(() => {
+		if (!innerWidth.current || !innerHeight.current) return;
+
+		const MOBILE_WIDTH = innerWidth.current - 30;
+		const MOBILE_HEIGHT = MOBILE_WIDTH * (3 / 4);
+
+		sizeX = isMobile.current ? MOBILE_WIDTH : DESKTOP_WIDTH;
+		sizeY = isMobile.current ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
+
 		setTimeout(() => {
 			if (terminalEl) terminalEl.scrollTop = terminalEl.scrollHeight;
 		}, 0);
 	});
 </script>
 
-<Window headerText="cmdtool 1.0" posX={15} posY={105} {sizeX} {sizeY}>
+<Window headerText="cmdtool 1.0" posX={15} {posY} {sizeX} {sizeY}>
 	<button
 		bind:this={terminalEl}
 		type="button"

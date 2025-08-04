@@ -8,7 +8,7 @@
 	import { highestZIndex } from "../lib/shared-state.svelte";
 	import { cn } from "../lib/utils";
 
-	const isMobile = new MediaQuery("max-width: 768px");
+	const isMobile = new MediaQuery("max-width: 640px");
 
 	let {
 		headerText = "",
