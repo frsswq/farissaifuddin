@@ -35,6 +35,7 @@
 			position({ default: { x: 15, y: 15 } })
 		])}
 		class="absolute size-20 items-center justify-center bg-black hover:cursor-grab"
+		style="z-index: {currentZIndex};"
 	>
 		<svg class="h-full w-full" viewBox="-50 -50 100 100">
 			<circle class="fill-white stroke-black stroke-[1.5px]" r="45" />
