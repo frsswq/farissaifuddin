@@ -1,16 +1,18 @@
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
+//
+
 export function onClickOutside(node: Node, callback: (node: Event) => void) {
-	return outside(node, 'click', callback);
+	return outside(node, "click", callback);
 }
 
 export function onMouseDownOutside(node: Node, callback: (node: Event) => void) {
-	return outside(node, 'mousedown', callback);
+	return outside(node, "mousedown", callback);
 }
 
 function outside(node: Node, listener: string, callback: (node: Event) => void) {

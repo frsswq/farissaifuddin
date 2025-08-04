@@ -1,15 +1,28 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { MediaQuery } from "svelte/reactivity";
 	import Window from "./window.svelte";
 
 	let isProcessing = $state(false);
+	const isMobile = new MediaQuery("max-width: 768px");
 
 	let terminalEl = $state<HTMLButtonElement | null>();
-	let hiddenSpanEl = $state<HTMLSpanElement | null>();
-	let inputEl = $state<HTMLInputElement | null>();
+	let inputEl = $state<HTMLTextAreaElement | null>();
 	let inputVal = $state("");
 	let terminalLines = $state(["frsswq% cat ~/about/*", ""]);
 	let posX, posY;
+	let sizeX = $state(0);
+	let sizeY = $state(0);
+
+	const DESKTOP_WIDTH = 400;
+	const DESKTOP_HEIGHT = (DESKTOP_WIDTH * 3) / 4;
+	const MOBILE_WIDTH = 300;
+	const MOBILE_HEIGHT = (MOBILE_WIDTH * 3) / 4;
+
+	$effect(() => {
+		sizeX = isMobile.current ? MOBILE_WIDTH : DESKTOP_WIDTH;
+		sizeY = isMobile.current ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
+	});
 
 	const runCommand = () => {
 		if (!inputVal.trim()) return;
@@ -27,6 +40,10 @@
 
 		if (cmd === "date") {
 			terminalLines.push(`${new Date().toString()}`);
+		}
+
+		if (cmd === "whoami") {
+			terminalLines.push(`frsswq (Faris Saifuddin)`);
 		}
 
 		if (cmd !== "clear") {
@@ -56,7 +73,7 @@
 	});
 </script>
 
-<Window headerText="cmdtool 1.0" posX={15} posY={105} sizeX={400} sizeY={300}>
+<Window headerText="cmdtool 1.0" posX={15} posY={105} {sizeX} {sizeY}>
 	<button
 		bind:this={terminalEl}
 		type="button"
@@ -68,16 +85,17 @@
 		{/each}
 
 		<div class="flex min-w-0 flex-1">
-			<span class="">frsswq%&nbsp;</span>
-			<div class="relative w-full">
+			<span class="h-fit">frsswq%&nbsp;</span>
+			<div class="relative h-full w-full">
 				<!-- svelte-ignore a11y_autofocus-->
 				<textarea
 					class="w-full resize-none bg-none text-transparent caret-transparent outline-none"
 					rows="2"
 					onkeydown={handleKeyDown}
+					bind:this={inputEl}
 					bind:value={inputVal}
-					autocomplete="off"
 					disabled={isProcessing}
+					spellcheck="false"
 					autofocus
 				></textarea>
 				<div

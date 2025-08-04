@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { ControlFrom, controls, draggable, events, position } from "@neodrag/svelte";
 	import { onMount } from "svelte";
-	import { MediaQuery } from "svelte/reactivity";
 	import { innerHeight, innerWidth } from "svelte/reactivity/window";
 	import CloseIcon from "../assets/icons/pixelarticons:close.svelte";
 
+	import { MediaQuery } from "svelte/reactivity";
 	import { highestZIndex } from "../lib/shared-state.svelte";
 	import { cn } from "../lib/utils";
 
-	const mobile = new MediaQuery("max-width: 768px");
+	const isMobile = new MediaQuery("max-width: 768px");
 
 	let {
 		headerText = "",
@@ -45,7 +45,7 @@
 		bind:this={windowElement}
 		{@attach draggable([
 			controls({
-				allow: ControlFrom.selector(mobile.current || children ? "#window" : "#window-header")
+				allow: ControlFrom.selector(isMobile.current || children ? "#window" : "#window-header")
 			}),
 			events({
 				onDragStart: () => {
@@ -58,7 +58,7 @@
 		style={`z-index: ${currentZIndex}; width: ${sizeX !== 0 ? sizeX : 200}px; height: ${sizeY !== 0 ? sizeY : 150}px`}
 		class={cn(
 			`absolute  border-2 border-black bg-white text-sm leading-none`,
-			mobile.current ? "select-none" : ""
+			isMobile.current ? "select-none" : ""
 		)}
 	>
 		<div class="relative flex h-full flex-col hover:cursor-grab sm:hover:cursor-default">
@@ -86,7 +86,7 @@
 			{:else}
 				<div
 					class={"mx-[3px] flex-1 overflow-auto focus:outline-none sm:hover:cursor-text"}
-					contenteditable={mobile.current ? "false" : "plaintext-only"}
+					contenteditable={isMobile.current ? "false" : "plaintext-only"}
 				>
 					<textarea class="h-full w-full resize-none">{contentText}</textarea>
 				</div>
