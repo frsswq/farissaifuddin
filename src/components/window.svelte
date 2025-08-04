@@ -75,6 +75,7 @@
 					{headerText !== "" ? headerText : "Untitled 1.0"}
 				</p>
 				<button
+					aria-label="close-window"
 					class="absolute -top-0.5 -right-0.5 inline-flex size-4.5 hover:cursor-pointer"
 					onclick={() => (showWindow = false)}
 				>

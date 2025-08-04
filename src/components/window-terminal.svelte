@@ -72,7 +72,6 @@
 <Window headerText="cmdtool 1.0" posX={15} {posY} {sizeX} {sizeY}>
 	<div
 		bind:this={terminalEl}
-		id="terminal-container"
 		class=" terminal-scrollbar flex h-full w-full flex-col overflow-y-scroll px-[3px] select-text hover:cursor-text"
 		onclick={() => inputEl?.focus()}
 		style="scrollbar-arrow-color: transparent;"
@@ -89,7 +88,7 @@
 				<!-- svelte-ignore a11y_autofocus-->
 				<textarea
 					class="command-scrollbar w-full resize-none bg-none text-transparent caret-transparent outline-none"
-					rows="1"
+					rows="2"
 					onkeydown={handleKeyDown}
 					bind:this={inputEl}
 					bind:value={inputVal}
@@ -107,29 +106,3 @@
 		</div>
 	</div>
 </Window>
-
-<style>
-	@keyframes blink {
-		0%,
-		100% {
-			opacity: 1;
-		}
-		50% {
-			opacity: 0;
-		}
-	}
-
-	.animate-blink {
-		animation: blink 1.5s step-end infinite;
-	}
-
-	#terminal-container {
-		scrollbar-width: thin;
-		scrollbar-color: black transparent;
-	}
-
-	textarea {
-		scrollbar-width: thin;
-		scrollbar-color: transparent transparent;
-	}
-</style>
