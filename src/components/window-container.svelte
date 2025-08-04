@@ -1,9 +1,9 @@
 <script lang="ts">
 	import WidgetClock from "./widget-clock.svelte";
-	import WindowAbout from "./window-about.svelte";
+	import WindowTerminal from "./window-terminal.svelte";
 </script>
 
 <section>
 	<WidgetClock />
-	<WindowAbout />
+	<WindowTerminal />
 </section>

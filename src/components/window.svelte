@@ -22,6 +22,7 @@
 	let currentZIndex = $state(10);
 
 	let showWindow: boolean = $state(true);
+	let isLoading = $state(true);
 
 	let windowElement = $state<HTMLDivElement | null>(null);
 	let windowPosition = $state({ x: posX, y: posY });
@@ -34,10 +35,12 @@
 				y: Math.max(0, (innerHeight.current - rect.height) / 2)
 			};
 		}
+
+		isLoading = false;
 	});
 </script>
 
-{#if showWindow}
+{#if showWindow && !isLoading}
 	<div
 		bind:this={windowElement}
 		{@attach draggable([
