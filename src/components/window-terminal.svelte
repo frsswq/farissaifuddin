@@ -20,21 +20,19 @@
 	const DESKTOP_HEIGHT = (DESKTOP_WIDTH * 3) / 4;
 
 	function runCommand() {
-		if (!inputVal.trim()) return;
-
 		const command = inputVal.trim();
 		isProcessing = true;
 
-		if (command !== "clear") {
-			terminalLines.push(`frsswq% ${command}`);
-		}
+		terminalLines.push(`frsswq% ${inputVal}`);
 
 		const result = executeCommands(command);
 
-		if (command !== "clear") {
+		if (command === "clear") {
+			terminalLines = [];
+		} else if (command) {
 			terminalLines.push(...result, "");
 		} else {
-			terminalLines = [];
+			terminalLines.push("");
 		}
 
 		inputVal = "";
@@ -74,8 +72,10 @@
 <Window headerText="cmdtool 1.0" posX={15} {posY} {sizeX} {sizeY}>
 	<div
 		bind:this={terminalEl}
-		class="mt-0.75 flex h-full w-full flex-col overflow-scroll px-[3px] select-text hover:cursor-text"
+		id="terminal-container"
+		class=" terminal-scrollbar flex h-full w-full flex-col overflow-y-scroll px-[3px] select-text hover:cursor-text"
 		onclick={() => inputEl?.focus()}
+		style="scrollbar-arrow-color: transparent;"
 		tabindex="-1"
 		aria-hidden="true"
 	>
@@ -88,14 +88,15 @@
 			<div class="relative h-full w-full">
 				<!-- svelte-ignore a11y_autofocus-->
 				<textarea
-					class="w-full resize-none bg-none text-transparent caret-transparent outline-none"
-					rows="2"
+					class="command-scrollbar w-full resize-none bg-none text-transparent caret-transparent outline-none"
+					rows="1"
 					onkeydown={handleKeyDown}
 					bind:this={inputEl}
 					bind:value={inputVal}
 					disabled={isProcessing}
 					spellcheck="false"
 					autofocus
+					style="wi"
 				></textarea>
 				<div
 					class="pointer-events-none absolute top-0 left-0 w-full min-w-0 text-left wrap-anywhere whitespace-pre-wrap"
@@ -120,5 +121,15 @@
 
 	.animate-blink {
 		animation: blink 1.5s step-end infinite;
+	}
+
+	#terminal-container {
+		scrollbar-width: thin;
+		scrollbar-color: black transparent;
+	}
+
+	textarea {
+		scrollbar-width: thin;
+		scrollbar-color: transparent transparent;
 	}
 </style>
