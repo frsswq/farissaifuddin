@@ -8,16 +8,14 @@
 	let isProcessing = $state(false);
 	const isMobile = new MediaQuery("max-width: 640px");
 
-	let terminalEl = $state<HTMLDivElement | null>();
-	let inputEl = $state<HTMLTextAreaElement | null>();
+	let terminalEl: HTMLDivElement | null;
+	let inputEl: HTMLTextAreaElement | null;
+
 	let inputVal = $state("");
 	let terminalLines = $state<string[]>([]);
 	let sizeX = $state(0);
 	let sizeY = $state(0);
 	let posY = $state(105);
-
-	const DESKTOP_WIDTH = 400;
-	const DESKTOP_HEIGHT = (DESKTOP_WIDTH * 3) / 4;
 
 	function runCommand() {
 		const command = inputVal.trim();
@@ -56,6 +54,8 @@
 	onMount(() => {
 		if (!innerWidth.current || !innerHeight.current) return;
 
+		const DESKTOP_WIDTH = 400;
+		const DESKTOP_HEIGHT = (DESKTOP_WIDTH * 3) / 4;
 		const MOBILE_WIDTH = innerWidth.current - 30;
 		const MOBILE_HEIGHT = MOBILE_WIDTH * (3 / 4);
 
@@ -85,7 +85,6 @@
 		{/each}
 
 		<div class="flex min-w-0 flex-1">
-			<span class="h-fit">frsswq%&nbsp;</span>
 			<div class="relative h-full w-full">
 				<!-- svelte-ignore a11y_autofocus-->
 				<textarea
@@ -102,7 +101,7 @@
 				<div
 					class="pointer-events-none absolute top-0 left-0 w-full min-w-0 text-left wrap-anywhere whitespace-pre-wrap"
 				>
-					{inputVal}<span class="animate-blink">█</span>
+					frsswq%&nbsp;{inputVal}<span class="animate-blink">█</span>
 				</div>
 			</div>
 		</div>
