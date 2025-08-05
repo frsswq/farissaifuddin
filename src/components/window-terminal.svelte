@@ -2,8 +2,10 @@
 	import { onMount } from "svelte";
 	import { MediaQuery } from "svelte/reactivity";
 	import { innerHeight, innerWidth } from "svelte/reactivity/window";
-	import { executeCommands } from "../lib/terminal-commands";
+	import { Terminal } from "../lib/terminal.svelte";
 	import Window from "./window.svelte";
+
+	const terminal = new Terminal();
 
 	let isProcessing = $state(false);
 	const isMobile = new MediaQuery("max-width: 640px");
@@ -13,76 +15,43 @@
 
 	const TERMINAL_POS_Y = 105;
 
-	let commandVal = $state("");
 	let isCommandFocused = $state(false);
-	let commandHistory = $state<string[]>([]);
-	let commandHistoryIndex = $state<number | null>(0);
-	let terminalLines = $state<string[]>([]);
 
 	let sizeX = $state(0);
 	let sizeY = $state(0);
 	let posY = $state(TERMINAL_POS_Y);
 
-	function runCommand(commandOverride?: string) {
-		const command = (commandOverride ?? commandVal).trim();
-		isProcessing = true;
-		terminalLines.push(`frsswq% ${commandOverride ?? commandVal}`);
-
-		if (
-			command &&
-			(commandHistory.length === 0 || commandHistory[commandHistory.length - 1] !== command)
-		) {
-			commandHistory.push(command);
-		}
-
-		const result = executeCommands(command);
-
-		if (command === "clear") {
-			terminalLines = [];
-		} else if (command) {
-			terminalLines.push(...result, "");
-		} else {
-			terminalLines.push("");
-		}
-
-		commandVal = "";
-		commandHistoryIndex = commandHistory.length;
-
-		setTimeout(() => {
-			if (terminalEl) terminalEl.scrollTop = terminalEl.scrollHeight;
-		}, 0);
-
-		isProcessing = false;
-	}
-
 	const handleKeyDown = (e: KeyboardEvent) => {
 		if (e.key === "Enter") {
 			e.preventDefault();
-			runCommand();
+			terminal.processInput(terminal.currentInput);
+			setTimeout(() => {
+				if (terminalEl) terminalEl.scrollTop = terminalEl.scrollHeight;
+			}, 0);
 		}
 
 		// @TODO: Add up and down key for accessing commands
 
-		if (e.key === "ArrowUp") {
-			e.preventDefault();
-			if (commandHistory.length > 0 && commandHistoryIndex !== null && commandHistoryIndex > 0) {
-				commandHistoryIndex -= 1;
-				commandVal = commandHistory[commandHistoryIndex];
-			}
-		}
+		// if (e.key === "ArrowUp") {
+		// 	e.preventDefault();
+		// 	if (commandHistory.length > 0 && commandHistoryIndex !== null && commandHistoryIndex > 0) {
+		// 		commandHistoryIndex -= 1;
+		// 		commandVal = commandHistory[commandHistoryIndex];
+		// 	}
+		// }
 
-		if (e.key === "ArrowDown") {
-			e.preventDefault();
-			if (commandHistory.length > 0 && commandHistoryIndex !== null) {
-				if (commandHistoryIndex < commandHistory.length - 1) {
-					commandHistoryIndex += 1;
-					commandVal = commandHistory[commandHistoryIndex];
-				} else {
-					commandHistoryIndex = commandHistory.length;
-					commandVal = "";
-				}
-			}
-		}
+		// if (e.key === "ArrowDown") {
+		// 	e.preventDefault();
+		// 	if (commandHistory.length > 0 && commandHistoryIndex !== null) {
+		// 		if (commandHistoryIndex < commandHistory.length - 1) {
+		// 			commandHistoryIndex += 1;
+		// 			commandVal = commandHistory[commandHistoryIndex];
+		// 		} else {
+		// 			commandHistoryIndex = commandHistory.length;
+		// 			commandVal = "";
+		// 		}
+		// 	}
+		// }
 
 		if (e.key === "Escape") {
 			e.preventDefault();
@@ -101,8 +70,8 @@
 		sizeX = isMobile.current ? MOBILE_WIDTH : DESKTOP_WIDTH;
 		sizeY = isMobile.current ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
 
-		runCommand("help");
-		runCommand("about");
+		terminal.processInput("help");
+		terminal.processInput("about");
 
 		setTimeout(() => {
 			if (terminalEl) terminalEl.scrollTop = terminalEl.scrollHeight;
@@ -110,7 +79,7 @@
 	});
 </script>
 
-<Window headerText="cmdtool 1.0" posX={15} {posY} {sizeX} {sizeY}>
+<Window headerText="Shell Tool 1.0" posX={15} {posY} {sizeX} {sizeY}>
 	<div
 		bind:this={terminalEl}
 		class=" terminal-scrollbar flex h-full w-full flex-col overflow-y-scroll px-[3px] select-text hover:cursor-text"
@@ -119,8 +88,10 @@
 		tabindex="-1"
 		aria-hidden="true"
 	>
-		{#each terminalLines as line}
-			<span class="text-left wrap-anywhere whitespace-pre-wrap">{line}<br /></span>
+		{#each terminal.lines as line}
+			<span class="text-left wrap-anywhere whitespace-pre-wrap"
+				>{line === "" ? "\u00A0" : line}</span
+			>
 		{/each}
 
 		<div class="flex min-w-0 flex-1">
@@ -131,7 +102,7 @@
 					rows="2"
 					onkeydown={handleKeyDown}
 					bind:this={commandEl}
-					bind:value={commandVal}
+					bind:value={terminal.currentInput}
 					onfocus={() => (isCommandFocused = true)}
 					onblur={() => (isCommandFocused = false)}
 					disabled={isProcessing}
@@ -142,7 +113,7 @@
 				<span
 					class="pointer-events-none absolute top-0 left-0 w-full min-w-0 text-left wrap-anywhere whitespace-pre-wrap"
 				>
-					frsswq%&nbsp;{commandVal}<span
+					{terminal.DEFAULT_TITLE}{terminal.currentInput}<span
 						class={isCommandFocused ? "animate-blink" : "text-transparent"}>█</span
 					>
 				</span>
