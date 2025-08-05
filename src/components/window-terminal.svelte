@@ -2,6 +2,7 @@
 	import { onMount } from "svelte";
 	import { MediaQuery } from "svelte/reactivity";
 	import { innerHeight, innerWidth } from "svelte/reactivity/window";
+	import { DEFAULT_PROMPT } from "../lib/const";
 	import { Terminal } from "../lib/terminal.svelte";
 	import Window from "./window.svelte";
 
@@ -59,7 +60,7 @@
 		}
 	};
 
-	onMount(() => {
+	onMount(async () => {
 		if (!innerWidth.current || !innerHeight.current) return;
 
 		const DESKTOP_WIDTH = 400;
@@ -70,8 +71,8 @@
 		sizeX = isMobile.current ? MOBILE_WIDTH : DESKTOP_WIDTH;
 		sizeY = isMobile.current ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
 
-		terminal.processInput("help");
-		terminal.processInput("about");
+		await terminal.processInput("help");
+		await terminal.processInput("about");
 
 		setTimeout(() => {
 			if (terminalEl) terminalEl.scrollTop = terminalEl.scrollHeight;
@@ -113,7 +114,7 @@
 				<span
 					class="pointer-events-none absolute top-0 left-0 w-full min-w-0 text-left wrap-anywhere whitespace-pre-wrap"
 				>
-					{terminal.DEFAULT_TITLE}{terminal.currentInput}<span
+					{DEFAULT_PROMPT}{terminal.currentInput}<span
 						class={isCommandFocused ? "animate-blink" : "text-transparent"}>█</span
 					>
 				</span>

@@ -5,8 +5,6 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
-//
-
 export function onClickOutside(node: Node, callback: (node: Event) => void) {
 	return outside(node, "click", callback);
 }
