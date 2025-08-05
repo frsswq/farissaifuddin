@@ -15,16 +15,25 @@
 
 	let commandVal = $state("");
 	let isCommandFocused = $state(false);
+	let commandHistory = $state<string[]>([]);
+	let commandHistoryIndex = $state<number | null>(0);
 	let terminalLines = $state<string[]>([]);
+
 	let sizeX = $state(0);
 	let sizeY = $state(0);
 	let posY = $state(TERMINAL_POS_Y);
 
-	function runCommand() {
-		const command = commandVal.trim();
+	function runCommand(commandOverride?: string) {
+		const command = (commandOverride ?? commandVal).trim();
 		isProcessing = true;
+		terminalLines.push(`frsswq% ${commandOverride ?? commandVal}`);
 
-		terminalLines.push(`frsswq% ${commandVal}`);
+		if (
+			command &&
+			(commandHistory.length === 0 || commandHistory[commandHistory.length - 1] !== command)
+		) {
+			commandHistory.push(command);
+		}
 
 		const result = executeCommands(command);
 
@@ -37,6 +46,7 @@
 		}
 
 		commandVal = "";
+		commandHistoryIndex = commandHistory.length;
 
 		setTimeout(() => {
 			if (terminalEl) terminalEl.scrollTop = terminalEl.scrollHeight;
@@ -55,10 +65,23 @@
 
 		if (e.key === "ArrowUp") {
 			e.preventDefault();
+			if (commandHistory.length > 0 && commandHistoryIndex !== null && commandHistoryIndex > 0) {
+				commandHistoryIndex -= 1;
+				commandVal = commandHistory[commandHistoryIndex];
+			}
 		}
 
 		if (e.key === "ArrowDown") {
 			e.preventDefault();
+			if (commandHistory.length > 0 && commandHistoryIndex !== null) {
+				if (commandHistoryIndex < commandHistory.length - 1) {
+					commandHistoryIndex += 1;
+					commandVal = commandHistory[commandHistoryIndex];
+				} else {
+					commandHistoryIndex = commandHistory.length;
+					commandVal = "";
+				}
+			}
 		}
 
 		if (e.key === "Escape") {
@@ -78,8 +101,8 @@
 		sizeX = isMobile.current ? MOBILE_WIDTH : DESKTOP_WIDTH;
 		sizeY = isMobile.current ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
 
-		terminalLines.push("frsswq% help", ...executeCommands("help"), "");
-		terminalLines.push("frsswq% about", ...executeCommands("about"), "");
+		runCommand("help");
+		runCommand("about");
 
 		setTimeout(() => {
 			if (terminalEl) terminalEl.scrollTop = terminalEl.scrollHeight;
@@ -97,7 +120,7 @@
 		aria-hidden="true"
 	>
 		{#each terminalLines as line}
-			<div class="text-left wrap-anywhere whitespace-pre-wrap">{line}<br /></div>
+			<span class="text-left wrap-anywhere whitespace-pre-wrap">{line}<br /></span>
 		{/each}
 
 		<div class="flex min-w-0 flex-1">
