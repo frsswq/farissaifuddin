@@ -9,19 +9,22 @@
 	const isMobile = new MediaQuery("max-width: 640px");
 
 	let terminalEl: HTMLDivElement | null;
-	let inputEl: HTMLTextAreaElement | null;
+	let commandEl: HTMLTextAreaElement | null;
 
-	let inputVal = $state("");
+	const TERMINAL_POS_Y = 105;
+
+	let commandVal = $state("");
+	let isCommandFocused = $state(false);
 	let terminalLines = $state<string[]>([]);
 	let sizeX = $state(0);
 	let sizeY = $state(0);
-	let posY = $state(105);
+	let posY = $state(TERMINAL_POS_Y);
 
 	function runCommand() {
-		const command = inputVal.trim();
+		const command = commandVal.trim();
 		isProcessing = true;
 
-		terminalLines.push(`frsswq% ${inputVal}`);
+		terminalLines.push(`frsswq% ${commandVal}`);
 
 		const result = executeCommands(command);
 
@@ -33,7 +36,7 @@
 			terminalLines.push("");
 		}
 
-		inputVal = "";
+		commandVal = "";
 
 		setTimeout(() => {
 			if (terminalEl) terminalEl.scrollTop = terminalEl.scrollHeight;
@@ -49,6 +52,19 @@
 		}
 
 		// @TODO: Add up and down key for accessing commands
+
+		if (e.key === "ArrowUp") {
+			e.preventDefault();
+		}
+
+		if (e.key === "ArrowDown") {
+			e.preventDefault();
+		}
+
+		if (e.key === "Escape") {
+			e.preventDefault();
+			commandEl?.blur();
+		}
 	};
 
 	onMount(() => {
@@ -75,7 +91,7 @@
 	<div
 		bind:this={terminalEl}
 		class=" terminal-scrollbar flex h-full w-full flex-col overflow-y-scroll px-[3px] select-text hover:cursor-text"
-		onclick={() => inputEl?.focus()}
+		onclick={() => commandEl?.focus()}
 		style="scrollbar-arrow-color: transparent;"
 		tabindex="-1"
 		aria-hidden="true"
@@ -91,18 +107,22 @@
 					class="command-scrollbar w-full resize-none bg-none text-transparent caret-transparent outline-none"
 					rows="2"
 					onkeydown={handleKeyDown}
-					bind:this={inputEl}
-					bind:value={inputVal}
+					bind:this={commandEl}
+					bind:value={commandVal}
+					onfocus={() => (isCommandFocused = true)}
+					onblur={() => (isCommandFocused = false)}
 					disabled={isProcessing}
 					spellcheck="false"
 					autofocus
 					style="wi"
 				></textarea>
-				<div
+				<span
 					class="pointer-events-none absolute top-0 left-0 w-full min-w-0 text-left wrap-anywhere whitespace-pre-wrap"
 				>
-					frsswq%&nbsp;{inputVal}<span class="animate-blink">█</span>
-				</div>
+					frsswq%&nbsp;{commandVal}<span
+						class={isCommandFocused ? "animate-blink" : "text-transparent"}>█</span
+					>
+				</span>
 			</div>
 		</div>
 	</div>
