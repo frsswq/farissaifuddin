@@ -14,7 +14,7 @@
 	let terminalEl: HTMLDivElement | null;
 	let commandEl: HTMLTextAreaElement | null;
 
-	const TERMINAL_POS_Y = 105;
+	const TERMINAL_POS_Y = 106;
 
 	let isCommandFocused = $state(false);
 
@@ -80,7 +80,7 @@
 	});
 </script>
 
-<Window headerText="Shell Tool 1.0" posX={15} {posY} {sizeX} {sizeY}>
+<Window headerText="Shell Tool 1.0" posX={16} {posY} {sizeX} {sizeY}>
 	<div
 		bind:this={terminalEl}
 		class=" terminal-scrollbar flex h-full w-full flex-col overflow-y-scroll px-[3px] select-text hover:cursor-text"
