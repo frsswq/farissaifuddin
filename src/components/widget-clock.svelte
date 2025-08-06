@@ -32,7 +32,7 @@
 					currentZIndex = ++highestZIndex.index;
 				}
 			}),
-			position({ default: { x: 15, y: 15 } })
+			position({ default: { x: 16, y: 16 } })
 		])}
 		class="absolute size-20 items-center justify-center bg-black hover:cursor-grab"
 		style="z-index: {currentZIndex};"

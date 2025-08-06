@@ -58,10 +58,12 @@ export class Terminal implements TerminalState {
 			output = [`${cmd}: command not found`];
 		}
 
-		if (output.length > 0) {
-			this.lines.push(...output, "");
-		} else {
-			this.lines.push("");
+		if (cmd !== "clear") {
+			if (output.length > 0) {
+				this.lines.push(...output, "");
+			} else {
+				this.lines.push("");
+			}
 		}
 	};
 }

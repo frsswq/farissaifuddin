@@ -102,6 +102,7 @@
 					class="command-scrollbar w-full resize-none bg-none text-transparent caret-transparent outline-none"
 					rows="2"
 					onkeydown={handleKeyDown}
+					oninput={() => (terminal.currentInput = terminal.currentInput.toLowerCase())}
 					bind:this={commandEl}
 					bind:value={terminal.currentInput}
 					onfocus={() => (isCommandFocused = true)}
