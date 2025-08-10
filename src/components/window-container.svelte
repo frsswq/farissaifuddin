@@ -7,3 +7,5 @@
 	<WidgetClock />
 	<WindowTerminal />
 </section>
+
+<!-- <main class="fixed inset-0 h-screen w-screen"></main> -->

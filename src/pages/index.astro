@@ -6,21 +6,17 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-	<main id="window-containers" class="fixed inset-0 h-screen w-screen">
-		<WindowContainer client:idle />
-		<LinkContainer />
-	</main>
+	<WindowContainer client:idle />
+	<LinkContainer />
 	<BgPattern />
 </Layout>
 
 <style>
 	main {
-		contain: layout style paint;
 		transform: translateZ(0);
 		-webkit-transform: translateZ(0);
 		backface-visibility: hidden;
 		-webkit-backface-visibility: hidden;
-		overflow: hidden;
 	}
 
 	main > * {
