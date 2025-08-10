@@ -25,34 +25,21 @@
 	const handleKeyDown = (e: KeyboardEvent) => {
 		if (e.key === "Enter") {
 			e.preventDefault();
-			terminal.processInput(terminal.currentInput);
+			terminal.executeCommand(terminal.currentCommand);
 			setTimeout(() => {
 				if (terminalEl) terminalEl.scrollTop = terminalEl.scrollHeight;
 			}, 0);
 		}
 
-		// @TODO: Add up and down key for accessing commands
+		if (e.key === "ArrowUp") {
+			e.preventDefault();
+			terminal.navigateHistory("up");
+		}
 
-		// if (e.key === "ArrowUp") {
-		// 	e.preventDefault();
-		// 	if (commandHistory.length > 0 && commandHistoryIndex !== null && commandHistoryIndex > 0) {
-		// 		commandHistoryIndex -= 1;
-		// 		commandVal = commandHistory[commandHistoryIndex];
-		// 	}
-		// }
-
-		// if (e.key === "ArrowDown") {
-		// 	e.preventDefault();
-		// 	if (commandHistory.length > 0 && commandHistoryIndex !== null) {
-		// 		if (commandHistoryIndex < commandHistory.length - 1) {
-		// 			commandHistoryIndex += 1;
-		// 			commandVal = commandHistory[commandHistoryIndex];
-		// 		} else {
-		// 			commandHistoryIndex = commandHistory.length;
-		// 			commandVal = "";
-		// 		}
-		// 	}
-		// }
+		if (e.key === "ArrowDown") {
+			e.preventDefault();
+			terminal.navigateHistory("down");
+		}
 
 		if (e.key === "Escape") {
 			e.preventDefault();
@@ -70,13 +57,6 @@
 
 		sizeX = isMobile.current ? MOBILE_WIDTH : DESKTOP_WIDTH;
 		sizeY = isMobile.current ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
-
-		await terminal.processInput("help");
-		await terminal.processInput("about");
-
-		setTimeout(() => {
-			if (terminalEl) terminalEl.scrollTop = terminalEl.scrollHeight;
-		}, 0);
 	});
 </script>
 
@@ -89,7 +69,10 @@
 		tabindex="-1"
 		aria-hidden="true"
 	>
-		{#each terminal.lines as line}
+		<span class="text-left wrap-anywhere whitespace-pre-wrap">
+			Type "help" to list all commands
+		</span>
+		{#each terminal.outputLines as line}
 			<span class="text-left wrap-anywhere whitespace-pre-wrap"
 				>{line === "" ? "\u00A0" : line}</span
 			>
@@ -102,9 +85,9 @@
 					class="command-scrollbar w-full resize-none bg-none text-transparent caret-transparent outline-none"
 					rows="2"
 					onkeydown={handleKeyDown}
-					oninput={() => (terminal.currentInput = terminal.currentInput.toLowerCase())}
+					oninput={() => (terminal.currentCommand = terminal.currentCommand.toLowerCase())}
 					bind:this={commandEl}
-					bind:value={terminal.currentInput}
+					bind:value={terminal.currentCommand}
 					onfocus={() => (isCommandFocused = true)}
 					onblur={() => (isCommandFocused = false)}
 					disabled={isProcessing}
@@ -115,7 +98,7 @@
 				<span
 					class="pointer-events-none absolute top-0 left-0 w-full min-w-0 text-left wrap-anywhere whitespace-pre-wrap"
 				>
-					{DEFAULT_PROMPT}{terminal.currentInput}<span
+					{DEFAULT_PROMPT}{terminal.currentCommand}<span
 						class={isCommandFocused ? "animate-blink" : "text-transparent"}>█</span
 					>
 				</span>

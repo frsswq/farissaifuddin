@@ -2,50 +2,74 @@ import { commands } from "./commands";
 import { DEFAULT_PROMPT } from "./const";
 
 interface TerminalState {
-	lines: string[];
-	inputHistory: string[];
-	currentInput: string;
+	outputLines: string[];
+	commandHistory: string[];
+	currentCommand: string;
 	historyIndex: number;
-	isProcessing: boolean;
-	processInput: (input: string) => void;
+	isExecuting: boolean;
+	executeCommand: (command: string) => void;
+	navigateHistory: (direction: "up" | "down") => void;
 }
 
 export class Terminal implements TerminalState {
-	lines = $state<string[]>([]);
-	inputHistory = $state<string[]>([]);
-	currentInput = $state<string>("");
+	outputLines = $state<string[]>([]);
+	commandHistory = $state<string[]>([]);
+	currentCommand = $state<string>("");
 	historyIndex = $state<number>(0);
-	isProcessing = $state<boolean>(false);
+	isExecuting = $state<boolean>(false);
+	private tempCommand = $state<string>("");
 
 	static readonly PROMPT = DEFAULT_PROMPT;
 
-	processInput = async (input: string) => {
-		this.isProcessing = true;
+	executeCommand = async (command: string) => {
+		this.isExecuting = true;
 
-		if (input && input !== this.inputHistory.at(-1)) {
-			this.inputHistory.push(input);
+		if (command && command !== this.commandHistory.at(-1)) {
+			this.commandHistory.push(command);
 		}
 
-		this.historyIndex = this.inputHistory.length;
-		this.currentInput = "";
+		this.historyIndex = this.commandHistory.length;
+		this.currentCommand = "";
 
-		this.lines.push(`${Terminal.PROMPT}${input}`);
+		this.outputLines.push(`${Terminal.PROMPT}${command}`);
 
-		const trimmedInput = input.trim();
+		const trimmedCommand = command.trim();
 
-		if (trimmedInput === "") {
-			await this.executeCommand("", []);
+		if (trimmedCommand === "") {
+			await this.runCommand("", []);
 		} else {
-			const [cmd, ...args] = trimmedInput.split(" ");
-			await this.executeCommand(cmd, args);
+			const [cmd, ...args] = trimmedCommand.split(" ");
+			await this.runCommand(cmd, args);
 		}
 
-		this.isProcessing = false;
+		this.isExecuting = false;
 	};
 
-	private executeCommand = async (cmd: string, args: string[]) => {
+	navigateHistory = async (direction: "up" | "down") => {
+		if (this.commandHistory.length === 0) return;
+		if (direction === "up") {
+			if (this.historyIndex === this.commandHistory.length) {
+				this.tempCommand = this.currentCommand;
+			}
+
+			if (this.historyIndex > 0) {
+				this.historyIndex--;
+				this.currentCommand = this.commandHistory[this.historyIndex];
+			}
+		} else if (direction === "down") {
+			if (this.historyIndex < this.commandHistory.length - 1) {
+				this.historyIndex++;
+				this.currentCommand = this.commandHistory[this.historyIndex];
+			} else if (this.historyIndex === this.commandHistory.length - 1) {
+				this.historyIndex = this.commandHistory.length;
+				this.currentCommand = this.tempCommand;
+			}
+		}
+	};
+
+	private runCommand = async (cmd: string, args: string[]) => {
 		if (cmd === "") {
-			this.lines.push("");
+			this.outputLines.push("");
 			return;
 		}
 
@@ -60,9 +84,9 @@ export class Terminal implements TerminalState {
 
 		if (cmd !== "clear") {
 			if (output.length > 0) {
-				this.lines.push(...output, "");
+				this.outputLines.push(...output, "");
 			} else {
-				this.lines.push("");
+				this.outputLines.push("");
 			}
 		}
 	};

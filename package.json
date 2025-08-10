@@ -11,7 +11,7 @@
   "dependencies": {
     "@astrojs/svelte": "^7.1.0",
     "@neodrag/svelte": "3.0.0-next.7",
-    "astro": "^5.12.8",
+    "astro": "^5.12.9",
     "bits-ui": "^2.9.2",
     "svelte": "^5.38.0"
   },

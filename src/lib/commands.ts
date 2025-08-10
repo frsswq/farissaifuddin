@@ -9,14 +9,14 @@ commands.set("help", {
 		const commandList = Array.from(commands.entries()).map(
 			([name, command]) => ` ${name.padEnd(7)} - ${command.description}`
 		);
-		return ["available commands:", ...commandList];
+		return ["commands:", ...commandList];
 	}
 });
 
 commands.set("clear", {
 	description: "clears the terminal screen.",
 	execute: (args: string[], terminal: Terminal): string[] => {
-		terminal.lines = [];
+		terminal.outputLines = [];
 		return [];
 	}
 });
