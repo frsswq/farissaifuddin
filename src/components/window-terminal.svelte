@@ -70,7 +70,7 @@
 		aria-hidden="true"
 	>
 		<span class="text-left wrap-anywhere whitespace-pre-wrap">
-			Type "help" to list all commands
+			type "help" to list all commands
 		</span>
 		{#each terminal.outputLines as line}
 			<span class="text-left wrap-anywhere whitespace-pre-wrap"

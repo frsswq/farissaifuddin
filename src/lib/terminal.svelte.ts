@@ -75,28 +75,4 @@ export class Terminal implements TerminalState {
 			}
 		}
 	};
-
-	// private runCommand = async (cmd: string, args: string[]) => {
-	// 	if (cmd === "") {
-	// 		this.outputLines.push("");
-	// 		return;
-	// 	}
-
-	// 	const command = commands.get(cmd);
-	// 	let output: string[];
-
-	// 	if (command) {
-	// 		output = await Promise.resolve(command.execute(args, this));
-	// 	} else {
-	// 		output = [`${cmd}: command not found`];
-	// 	}
-
-	// 	if (cmd !== "clear") {
-	// 		if (output.length > 0) {
-	// 			this.outputLines.push(...output, "");
-	// 		} else {
-	// 			this.outputLines.push("");
-	// 		}
-	// 	}
-	// };
 }
