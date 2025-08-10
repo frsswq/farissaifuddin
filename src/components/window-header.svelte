@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { ControlFrom, controls, draggable, events, position } from "@neodrag/svelte";
 	import { onMount } from "svelte";
-	import { innerHeight, innerWidth } from "svelte/reactivity/window";
 	import CloseIcon from "../assets/icons/pixelarticons:close.svelte";
 
 	import { MediaQuery } from "svelte/reactivity";
@@ -12,7 +11,6 @@
 
 	let {
 		headerText = "",
-		contentText = "",
 		children = undefined,
 		posX = 0,
 		posY = 0,
@@ -24,35 +22,23 @@
 	let showWindow: boolean = $state(true);
 	let isLoading = $state(true);
 
-	let windowElement = $state<HTMLDivElement | null>(null);
-	let windowPosition = $state({ x: posX, y: posY });
-
 	onMount(() => {
-		if (windowElement && innerWidth.current && innerHeight.current && (posX === 0 || posY === 0)) {
-			const rect = windowElement.getBoundingClientRect();
-			windowPosition = {
-				x: Math.max(0, (innerWidth.current - rect.width) / 2),
-				y: Math.max(0, (innerHeight.current - rect.height) / 2)
-			};
-		}
-
 		isLoading = false;
 	});
 </script>
 
 {#if showWindow && !isLoading}
 	<div
-		bind:this={windowElement}
 		{@attach draggable([
 			controls({
-				allow: ControlFrom.selector(isMobile.current && children ? "#window" : "#window-header")
+				allow: ControlFrom.selector("#window-header")
 			}),
 			events({
 				onDragStart: () => {
 					currentZIndex = ++highestZIndex.index;
 				}
 			}),
-			position({ default: windowPosition })
+			position({ default: { x: posX, y: posY } })
 		])}
 		id="window"
 		style={`z-index: ${currentZIndex}; width: ${sizeX !== 0 ? sizeX : 200}px; height: ${sizeY !== 0 ? sizeY : 150}px`}
@@ -82,16 +68,7 @@
 					<CloseIcon className="size-4.5 shrink absolute -top-0.5 -right-0.5" />
 				</button>
 			</div>
-			{#if children}
-				{@render children()}
-			{:else}
-				<div
-					class={"mx-[3px] flex-1 overflow-auto focus:outline-none sm:hover:cursor-text"}
-					contenteditable={isMobile.current ? "false" : "plaintext-only"}
-				>
-					<textarea class="h-full w-full resize-none">{contentText}</textarea>
-				</div>
-			{/if}
+			{@render children()}
 		</div>
 	</div>
 {/if}

@@ -4,7 +4,7 @@
 	import { innerHeight, innerWidth } from "svelte/reactivity/window";
 	import { DEFAULT_PROMPT } from "../lib/const";
 	import { Terminal } from "../lib/terminal.svelte";
-	import Window from "./window.svelte";
+	import Window from "./window-header.svelte";
 
 	const terminal = new Terminal();
 
