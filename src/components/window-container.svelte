@@ -3,9 +3,9 @@
 	import WindowTerminal from "./window-terminal.svelte";
 </script>
 
-<section>
+<main class="select-none">
 	<WidgetClock />
 	<WindowTerminal />
-</section>
+</main>
 
 <!-- <main class="fixed inset-0 h-screen w-screen"></main> -->
