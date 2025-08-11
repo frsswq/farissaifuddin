@@ -63,7 +63,7 @@
 <Window headerText="Shell Tool 1.0" posX={16} {posY} {sizeX} {sizeY}>
 	<div
 		bind:this={terminalEl}
-		class=" terminal-scrollbar flex h-full w-full flex-col overflow-y-scroll px-[3px] select-text hover:cursor-text"
+		class="terminal-scrollbar flex h-full w-full flex-col overflow-y-scroll px-[3px] select-none hover:cursor-text"
 		onclick={() => commandEl?.focus()}
 		style="scrollbar-arrow-color: transparent;"
 		tabindex="-1"
@@ -93,7 +93,6 @@
 					disabled={isProcessing}
 					spellcheck="false"
 					autofocus
-					style="wi"
 				></textarea>
 				<span
 					class="pointer-events-none absolute top-0 left-0 w-full min-w-0 text-left wrap-anywhere whitespace-pre-wrap"

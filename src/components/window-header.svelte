@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ControlFrom, controls, draggable, events, position } from "@neodrag/svelte";
+	import { draggable, events, position } from "@neodrag/svelte";
 	import { onMount } from "svelte";
 	import CloseIcon from "../assets/icons/pixelarticons:close.svelte";
 
@@ -11,28 +11,26 @@
 
 	let {
 		headerText = "",
+		headerClass = "",
 		children = undefined,
-		posX = 0,
-		posY = 0,
-		sizeX = 0,
-		sizeY = 0
+		posX,
+		posY,
+		sizeX,
+		sizeY
 	} = $props();
 	let currentZIndex = $state(10);
 
 	let showWindow: boolean = $state(true);
-	let isLoading = $state(true);
+	let isMounted = $state(false);
 
 	onMount(() => {
-		isLoading = false;
+		isMounted = true;
 	});
 </script>
 
-{#if showWindow && !isLoading}
+{#if showWindow}
 	<div
 		{@attach draggable([
-			controls({
-				allow: ControlFrom.selector("#window-header")
-			}),
 			events({
 				onDragStart: () => {
 					currentZIndex = ++highestZIndex.index;
@@ -40,25 +38,21 @@
 			}),
 			position({ default: { x: posX, y: posY } })
 		])}
-		id="window"
-		style={`z-index: ${currentZIndex}; width: ${sizeX !== 0 ? sizeX : 200}px; height: ${sizeY !== 0 ? sizeY : 150}px`}
+		style={`z-index: ${currentZIndex}; width: ${sizeX}px; height: ${sizeY}px`}
 		class={cn(
-			`absolute border-2 border-black bg-white text-sm leading-none`,
-			isMobile.current ? "select-none" : ""
+			!isMounted && "hidden",
+			` absolute border-2 border-black bg-white text-sm`,
+			headerClass
 		)}
 	>
-		<div class="relative flex h-full flex-col hover:cursor-grab sm:hover:cursor-default">
+		<div class="relative flex h-full flex-col text-sm leading-none">
 			<span
-				id="inset-border"
 				class="pointer-events-none absolute top-[0.5px] right-[0.5px] bottom-[0.5px] left-[0.5px] border-2 border-black"
 			></span>
 
-			<div
-				id="window-header"
-				class="	sticky top-0 z-1 flex h-4 w-full justify-between bg-black text-white select-none sm:hover:cursor-grab"
-			>
-				<p class="absolute -top-0.5 w-fit whitespace-nowrap">
-					{headerText !== "" ? headerText : "Untitled 1.0"}
+			<div class="sticky top-0 flex h-4 w-full cursor-grab justify-between bg-black text-white">
+				<p class="absolute -top-0.5 w-fit leading-none whitespace-nowrap select-none">
+					{headerText}
 				</p>
 				<button
 					aria-label="close-window"
