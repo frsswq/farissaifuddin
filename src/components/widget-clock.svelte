@@ -36,7 +36,7 @@
 	])}
 	class={cn(
 		!isMounted && "hidden",
-		"absolute size-20 items-center justify-center bg-black hover:cursor-grab"
+		"absolute size-20 items-center justify-center bg-black select-none hover:cursor-grab"
 	)}
 	style="z-index: {currentZIndex};"
 >
