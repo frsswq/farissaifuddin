@@ -11,7 +11,7 @@
 		class=" inline-flex size-8 items-center justify-center bg-black"
 		title="Github"
 	>
-		<GithubIcon className="size-6 text-white" />
+		<GithubIcon class="size-6 text-white" />
 	</a>
 	<a
 		href="https://www.linkedin.com/in/faris-saifuddin-wafiq-a22a74174/"
@@ -19,7 +19,7 @@
 		class=" inline-flex size-8 items-center justify-center bg-black"
 		title="LinkedIn"
 	>
-		<LinkedInIcon className="size-6 text-white" />
+		<LinkedInIcon class="size-6 text-white" />
 	</a>
 	<a
 		href="https://x.com/farisdotsaif"
@@ -27,6 +27,6 @@
 		class=" inline-flex size-8 items-center justify-center bg-black"
 		title="LinkedIn"
 	>
-		<XIcon className="size-6 text-white" />
+		<XIcon class="size-6 text-white" />
 	</a>
 </section>
