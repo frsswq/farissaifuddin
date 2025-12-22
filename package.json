@@ -9,21 +9,21 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/svelte": "^7.1.0",
+    "@astrojs/svelte": "^7.2.4",
     "@neodrag/svelte": "3.0.0-next.8",
-    "astro": "^5.13.5",
-    "bits-ui": "^2.9.6",
-    "svelte": "^5.38.6"
+    "astro": "^5.16.6",
+    "bits-ui": "^2.14.4",
+    "svelte": "^5.46.0"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.1.12",
+    "@tailwindcss/vite": "^4.1.18",
     "clsx": "^2.1.1",
-    "prettier": "^3.6.2",
+    "prettier": "^3.7.4",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-svelte": "^3.4.0",
+    "prettier-plugin-svelte": "^3.4.1",
     "prettier-plugin-tailwindcss": "^0.6.14",
-    "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.12",
-    "typescript": "^5.9.2"
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3"
   }
 }

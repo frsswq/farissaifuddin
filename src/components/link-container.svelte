@@ -1,7 +1,6 @@
 <script lang="ts">
 	import GithubIcon from "../assets/icons/pixelarticons:github.svelte";
 	import LinkedInIcon from "../assets/icons/pixeliconlibrary:linkedin.svelte";
-	import XIcon from "../assets/icons/pixeliconlibrary:x.svelte";
 </script>
 
 <section class="absolute bottom-4 left-4 flex gap-x-2">
@@ -20,13 +19,5 @@
 		title="LinkedIn"
 	>
 		<LinkedInIcon class="size-6 text-white" />
-	</a>
-	<a
-		href="https://x.com/farisdotsaif"
-		target="_blank"
-		class=" inline-flex size-8 items-center justify-center bg-black"
-		title="LinkedIn"
-	>
-		<XIcon class="size-6 text-white" />
 	</a>
 </section>
