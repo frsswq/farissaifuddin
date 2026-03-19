@@ -1,2 +1,2 @@
-Always commit every checkpoint using a Conventional Commit message.
-For Svelte-specific problems, reference @docs/SVELTE.md; for Astro-specific problems, reference @docs/ASTRO.md.
+- Always commit every checkpoint using a Conventional Commit message.
+- For Svelte-specific problems, reference @docs/SVELTE.md; for Astro-specific problems, reference @docs/ASTRO.md.

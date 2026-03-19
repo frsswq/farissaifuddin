@@ -27,5 +27,3 @@ bun install
 ```sh
 bun run dev
 ```
-
-If `bun` is not found, add `~/.bun/bin` to your shell `PATH`.
