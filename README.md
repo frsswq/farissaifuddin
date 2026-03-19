@@ -19,11 +19,11 @@ https://github.com/frsswq/frsswq.com
 ### 📦️ Install dependencies
 
 ```sh
-pnpm i
+bun install
 ```
 
 ### 💿️ Run the development server
 
 ```sh
-pnpm run dev
+bun run dev
 ```
